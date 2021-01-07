@@ -6,7 +6,8 @@ require('dotenv/config');
 
 //Initialization
 const app = express();
-
+const authJwt =  require('./helpers/jwt');
+const errorHandler =  require('./helpers/error-handler');
 
 //Setting
 app.set('port',process.env.PORT || 3000);
@@ -15,8 +16,8 @@ app.set('port',process.env.PORT || 3000);
 app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.options('*',cors());
-
-
+app.use(authJwt())
+app.use(errorHandler)
 
 //routes
 app.use('/',require('./routers/index.routers'));
