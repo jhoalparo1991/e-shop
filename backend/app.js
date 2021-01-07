@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser'); 
 const morgan = require('morgan');
 const cors = require('cors');
+const path = require('path');
 require('dotenv/config');
 
 //Initialization
@@ -17,6 +18,7 @@ app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.options('*',cors());
 app.use(authJwt())
+app.use('/public/uploads',express.static(__dirname+'/public/uploads'));
 app.use(errorHandler)
 
 //routes
