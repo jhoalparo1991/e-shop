@@ -52,6 +52,26 @@ router.get('/:id', async(req,res)=>{
     }
 })
 
+//Count users
+router.get('/get/count', async(req,res)=>{
+    try {
+
+        const user = await User.countDocuments( count => count)
+        if(!user) return res.status(400).json({ 
+            success:false,
+        })
+        return res.status(200).json({
+            success:true,
+            user
+        })
+    } catch (error) {
+        return res.status(400).json({
+            success:false,
+            error
+        })
+    }
+})
+
 //Login
 router.post('/login', async(req,res)=>{
     try {
@@ -121,7 +141,34 @@ router.post('/register', async(req,res)=>{
     }
 })
 
+//Delete users
+router.delete('/:id', async(req,res)=>{
+    try {
 
+        if(!isValidObjectId(req.params.id)){
+            return res.status(400).json({ 
+                success:false,
+                message : 'the user id  invalid'
+            })
+        }
+
+        const user = await User.findByIdAndRemove(req.params.id);
+
+        if(!user) return res.status(400).json({ 
+            success:false,
+            message:'Error deleting user'
+        })
+        return res.status(200).json({
+            success:true,
+            message:'User deleting successfully'
+        })
+    } catch (error) {
+        return res.status(400).json({
+            success:false,
+            error
+        })
+    }
+})
 
 module.exports = router;
 
